@@ -10,6 +10,7 @@
 /bin/
 /build/
 dist/
+mongo/
 
 # Ignore package manager directories
 /node_modules/
