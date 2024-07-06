@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
 import { AuthController } from "./controller";
 import { AuthDataSourceImpl, AuthRepositoryImpl } from "../../infrastructure";
 
