@@ -6,6 +6,8 @@ export class AuthController {
     constructor(private readonly authRepository: AuthRepository) { }
 
     private handleError(error: unknown, res: Response) {
+        console.log(error);
+
         if (error instanceof CustomError) {
             return res.status(error.statusCode).json({ message: error.message });
         }

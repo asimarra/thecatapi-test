@@ -8,6 +8,8 @@ export class ApiCatController {
     constructor(private readonly apiCatService: ApiCatService) { }
 
     private handleError(error: unknown, res: Response) {
+        console.log(error);
+
         if (error instanceof CustomError) {
             return res.status(error.statusCode).json({ message: error.message });
         }
