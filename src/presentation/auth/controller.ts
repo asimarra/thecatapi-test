@@ -41,7 +41,7 @@ export class AuthController {
                 name: loggedUser.name,
                 email: loggedUser.email
             };
-            const token = jwtAdapter.generateToken(tokenPayload);
+            const token = await jwtAdapter.generateToken(tokenPayload);
 
             return res.json(new AuthEntity(tokenPayload, token));
         } catch (error) {

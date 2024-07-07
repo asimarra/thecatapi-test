@@ -2,6 +2,7 @@ import { Router } from "express";
 import { AuthRoutes } from "./auth/routes";
 import { ApiCatRoutes } from "./apiCat/routes";
 import { CatImagesRoutes } from "./catImages/routes";
+import { AuthMiddleware } from "./middlewares/auth.middleware";
 
 export class AppRoutes {
     static get routes(): Router {
@@ -13,7 +14,7 @@ export class AppRoutes {
 
         router.use("/api/auth", AuthRoutes.routes);
         router.use("/api/breeds", ApiCatRoutes.routes);
-        router.use("/api/images", CatImagesRoutes.routes);
+        router.use("/api/images", [AuthMiddleware.validateJWT], CatImagesRoutes.routes);
 
         return router;
     }

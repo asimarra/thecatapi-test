@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ApiCatService } from "../../infrastructure";
 import { ApiCatController } from "./controller";
+import { AuthMiddleware } from "../middlewares/auth.middleware";
 
 
 export class ApiCatRoutes {
@@ -14,9 +15,9 @@ export class ApiCatRoutes {
         // Api Cat Routes
         const apiCatController: ApiCatController = new ApiCatController(apiCatService);
 
-        router.get("/", apiCatController.getBreeds);
-        router.get("/search", apiCatController.searchBreeds);
-        router.get("/:breed_id", apiCatController.getBreedById);
+        router.get("/", AuthMiddleware.validateJWT, apiCatController.getBreeds);
+        router.get("/search", [AuthMiddleware.validateJWT], apiCatController.searchBreeds);
+        router.get("/:breed_id", [AuthMiddleware.validateJWT], apiCatController.getBreedById);
 
         return router;
     }
