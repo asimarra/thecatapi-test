@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import { AuthRepository, CustomError, RegisterUserDTO } from "../../domain";
+import { AuthRepository, CustomError, RegisterUserDTO, UserEntity } from "../../domain";
 import { LoginUserDTO } from "../../domain/dtos/auth/login-user.dto";
+import { jwtAdapter } from "../../config/jwtAdapter";
+import { AuthEntity } from "../../domain/entities/auth.entity";
 
 export class AuthController {
     constructor(private readonly authRepository: AuthRepository) { }
@@ -33,7 +35,15 @@ export class AuthController {
 
         try {
             const loggedUser = await this.authRepository.login(loginUserDTO!);
-            return res.json(loggedUser);
+
+            const tokenPayload = {
+                id: loggedUser.id,
+                name: loggedUser.name,
+                email: loggedUser.email
+            };
+            const token = jwtAdapter.generateToken(tokenPayload);
+
+            return res.json(new AuthEntity(tokenPayload, token));
         } catch (error) {
             return this.handleError(error, res);
         }
