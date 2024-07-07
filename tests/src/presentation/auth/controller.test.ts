@@ -2,6 +2,7 @@ import * as httpMock from 'node-mocks-http';
 import { AuthController } from "../../../../src/presentation/auth/controller";
 import { AuthDataSource, RegisterUserDTO, UserEntity } from "../../../../src/domain";
 import { LoginUserDTO } from '../../../../src/domain/dtos/auth/login-user.dto';
+import { AuthEntity } from '../../../../src/domain/entities/auth.entity';
 
 let req: any, res: any, next;
 
@@ -80,13 +81,17 @@ describe("AuthController", () => {
 
         it("should return the logged in user data if login is successful", async () => {
             req.body = { email: userData.email, password: userData.password };
-            const loggedInUser = { ...userData, id: 1 };
+            const loggedInUser = { ...userData, id: "1" };
             authRepository.login = jest.fn().mockResolvedValue(loggedInUser);
 
             await authController.loginUser(req, res);
 
             expect(res.statusCode).toBe(200);
-            expect(res._getJSONData()).toEqual(loggedInUser);
+            expect(res._getJSONData()).toEqual(new AuthEntity({
+                id: loggedInUser.id,
+                name: loggedInUser.name,
+                email: loggedInUser.email
+            }, expect.any(String)));
             expect(authRepository.login).toHaveBeenCalledWith(expect.any(LoginUserDTO));
         });
     });
