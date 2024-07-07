@@ -8,6 +8,7 @@ export class ApiCatService implements CatRepository {
     private baseUrl: string;
     private token: string;
     private axiosInstance: AxiosInstance;
+    private breed: string = "breeds";
 
     constructor(baseUrl: string, token: string) {
         this.baseUrl = baseUrl;
@@ -21,14 +22,14 @@ export class ApiCatService implements CatRepository {
     }
 
     async getAll(limit: number = 10, page: number = 0): Promise<BreedEntity[]> {
-        const response = await this.axiosInstance.get(`${this.baseUrl}/breeds?limit=${limit}&page=${page}`);
+        const response = await this.axiosInstance.get(`${this.baseUrl}/${this.breed}?limit=${limit}&page=${page}`);
         const data = response.data || [];
 
         return data.map((breed: any) => new BreedEntity(breed.id, breed.name, breed.description, breed.temperament, breed.origin, breed.reference_image_id));
     }
 
     async getById(id: string): Promise<BreedEntity> {
-        const response = await this.axiosInstance.get(`${this.baseUrl}/breeds/${id}`);
+        const response = await this.axiosInstance.get(`${this.baseUrl}/${this.breed}/${id}`);
         const data = response.data || {};
         return new BreedEntity(data.id, data.name, data.description, data.temperament, data.origin, data.reference_image_id);
     }
@@ -36,7 +37,7 @@ export class ApiCatService implements CatRepository {
     async search(filters: Filters, limit: number = 10, page: number = 0): Promise<BreedEntity[]> {
         const params = Utils.dinamicURLSearchParams({ ...filters, limit, page });
 
-        const response = await this.axiosInstance.get(`${this.baseUrl}/breeds/search?${params}`);
+        const response = await this.axiosInstance.get(`${this.baseUrl}/${this.breed}/search?${params}`);
         const data = response.data || [];
 
         return data.map((breed: any) => new BreedEntity(breed.id, breed.name, breed.description, breed.temperament, breed.origin, breed.reference_image_id));

@@ -1,4 +1,4 @@
-export class BreedImagesEntity {
+export class CatImagesEntity {
     public id: string;
     public url: string;
     public width: string;
