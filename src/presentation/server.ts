@@ -1,5 +1,6 @@
 
 import express, { Router } from 'express';
+import cors from 'cors';
 
 interface Options {
     port?: number;
@@ -22,6 +23,13 @@ export class Server {
         // Middlewares
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded 
+
+
+        this.app.use(cors({
+            origin: '*',
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+        }));
 
         // Use defined routes
         this.app.use(this.routes);
